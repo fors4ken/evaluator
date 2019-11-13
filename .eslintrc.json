@@ -1,0 +1,25 @@
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "linebreak-style": ["off", "unix"],
+    "no-case-declarations": "off",
+    "no-console": "off",
+    "eqeqeq": ["warn", "always"],
+    "no-undef": "error",
+    "no-undef-init": "error",
+    "no-undefined": "error",
+    "no-unused-vars": "warn",
+    "no-shadow": "warn",
+    "no-shadow-restricted-names": "error",
+    "no-extra-boolean-cast": "off",
+    "require-atomic-updates": "off"
+  }
+}
