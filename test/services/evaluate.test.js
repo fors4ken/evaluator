@@ -9,9 +9,9 @@ describe('\'evaluate\' service', () => {
 		const service = app.service('evaluate');
 		assert.ok(service, 'Registered the service');
 	});
-
+	const evaluate = app.service('evaluate');
 	context('isDigit', () => {
-		const evaluate = app.service('evaluate');
+
 		it('operators should return false', () => {
 			expect(evaluate.isDigit('+')).to.be.false;
 			expect(evaluate.isDigit('-')).to.be.false;
@@ -26,7 +26,6 @@ describe('\'evaluate\' service', () => {
 	});
 
 	context('isOperator', () => {
-		const evaluate = app.service('evaluate');
 		it('operators and parenthesis should return true', () => {
 			expect(evaluate.isOperator('+')).to.be.true;
 			expect(evaluate.isOperator('-')).to.be.true;
@@ -40,6 +39,34 @@ describe('\'evaluate\' service', () => {
 			expect(evaluate.isOperator('10')).to.be.false;
 			expect(evaluate.isOperator('.')).to.be.false;
 		});
+	});
+
+	context('tokenizeExpression', () => {
+		it('should tokenize expression', () => {
+			expect(evaluate.tokenizeExpression('(4+1)/2')).to.be.deep.equal(['(', '4', '+', '1', ')', '/', '2']);
+			expect(evaluate.tokenizeExpression('-2+2')).to.be.deep.equal(['-2', '+', '2']);
+			expect(evaluate.tokenizeExpression('-42+2')).to.be.deep.equal(['-42', '+', '2']);
+			expect(evaluate.tokenizeExpression('4+42/2')).to.be.deep.equal(['4', '+', '42', '/', '2']);
+			expect(evaluate.tokenizeExpression('(1+2)/3*(4-5)')).to.be.deep.equal(['(', '1', '+', '2', ')', '/', '3', '*', '(', '4', '-', '5', ')']);
+		});
+	});
+
+	context('validateExpression', () => {
+		it('should validate correct expressions as true', () => {
+			expect(evaluate.validateExpression(['(', '4', '+', '1', ')', '/', '2'])).to.be.true;
+			expect(evaluate.validateExpression(['-2', '+', '2'])).to.be.true;
+			expect(evaluate.validateExpression(['-42', '+', '2'])).to.be.true;
+			expect(evaluate.validateExpression(['4', '+', '42', '/', '2'])).to.be.true;
+			expect(evaluate.validateExpression(['(', '1', '+', '2', ')', '/', '3', '*', '(', '4', '-', '5', ')'])).to.be.true;
+		});
+		it('should validate incorrect expressions as false', () => {
+			expect(evaluate.validateExpression(['-', '+', '1'])).to.be.false;
+			expect(evaluate.validateExpression(['1', '+', '-',])).to.be.false;
+			expect(evaluate.validateExpression(['(', '4', '+', '1', '(', '2'])).to.be.false;
+			expect(evaluate.validateExpression([')', '1', '+', '2',])).to.be.false;
+			expect(evaluate.validateExpression(['(', '1', '+', '2', ')', ')',])).to.be.false;
+		});
+
 	});
 
 });
