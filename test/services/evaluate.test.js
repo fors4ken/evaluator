@@ -18,10 +18,27 @@ describe('\'evaluate\' service', () => {
 			expect(evaluate.isDigit('/')).to.be.false;
 			expect(evaluate.isDigit('*')).to.be.false;
 		});
-		it('digits & . should return true', () => {
+		it('digits & period should return true', () => {
 			expect(evaluate.isDigit('0')).to.be.true;
 			expect(evaluate.isDigit('10')).to.be.true;
 			expect(evaluate.isDigit('.')).to.be.true;
+		});
+	});
+
+	context('isOperator', () => {
+		const evaluate = app.service('evaluate');
+		it('operators and parenthesis should return true', () => {
+			expect(evaluate.isOperator('+')).to.be.true;
+			expect(evaluate.isOperator('-')).to.be.true;
+			expect(evaluate.isOperator('/')).to.be.true;
+			expect(evaluate.isOperator('*')).to.be.true;
+			expect(evaluate.isOperator('(')).to.be.true;
+			expect(evaluate.isOperator(')')).to.be.true;
+		});
+		it('digits, alphabets & period should return false', () => {
+			expect(evaluate.isOperator('0')).to.be.false;
+			expect(evaluate.isOperator('10')).to.be.false;
+			expect(evaluate.isOperator('.')).to.be.false;
 		});
 	});
 
