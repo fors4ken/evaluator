@@ -5,7 +5,7 @@ exports.Evaluate = class Evaluate {
 	}
 
 	isDigit(ch) {
-		if(ch==='.') return true;
+		if (ch === '.') return true;
 		if (isNaN(ch)) return false;
 		else return true;
 	}
@@ -16,7 +16,7 @@ exports.Evaluate = class Evaluate {
 	}
 
 	isDecimal(ch) {
-		if(ch==='.') return true;
+		if (ch === '.') return true;
 		else return false;
 	}
 
@@ -30,13 +30,26 @@ exports.Evaluate = class Evaluate {
 	tokenizeExpression(str) {
 		str = str.split("");
 		let tokenArray = [];
-		let numBuffer = [];
+		let numBuffer = "";
 		for (let i = 0; i < str.length; i++) {
-			if(this.isOperator(str[i])) tokenArray.push(str[i]);
+
+			if (this.isOperator(str[i])) {
+				if (numBuffer !== "") {
+					tokenArray.push(numBuffer);
+					numBuffer = "";
+				}
+				tokenArray.push(str[i]);
+			}
+
 			else if (this.isDigit(str[i])) {
-				console.log("wow");
-			}			
+				numBuffer = numBuffer + str[i];
+			}
 		}
+		if (numBuffer) {
+			tokenArray.push(numBuffer);
+		}
+		return tokenArray;
+
 	}
 
 	/**
@@ -62,5 +75,6 @@ exports.Evaluate = class Evaluate {
 
 	async create(data, params) {
 		let expression = data.expression;
+		this.tokenizeExpression('(4+1)/2');
 	}
 };
