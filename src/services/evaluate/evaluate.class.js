@@ -4,13 +4,19 @@ exports.Evaluate = class Evaluate {
 		this.options = options || {};
 	}
 
-	isDigit(str) {
-		if (isNaN(str)) return false;
+	isDigit(ch) {
+		if(ch==='.') return true;
+		if (isNaN(ch)) return false;
 		else return true;
 	}
 
-	isOperator(str) {
-		if (str === '+' || str === '-' || str === '*' || str === '/' || str === '(' || str === ')') return true;
+	isOperator(ch) {
+		if (ch === '+' || ch === '-' || ch === '*' || ch === '/' || ch === '(' || ch === ')') return true;
+		else return false;
+	}
+
+	isDecimal(ch) {
+		if(ch==='.') return true;
 		else return false;
 	}
 
@@ -22,6 +28,15 @@ exports.Evaluate = class Evaluate {
 	 * @example '(a+b)/c' --> ['(','a','+','b',')','/','c']
 	 */
 	tokenizeExpression(str) {
+		str = str.split("");
+		let tokenArray = [];
+		let numBuffer = [];
+		for (let i = 0; i < str.length; i++) {
+			if(this.isOperator(str[i])) tokenArray.push(str[i]);
+			else if (this.isDigit(str[i])) {
+				console.log("wow");
+			}			
+		}
 	}
 
 	/**
