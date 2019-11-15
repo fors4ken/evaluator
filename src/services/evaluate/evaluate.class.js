@@ -33,12 +33,24 @@ exports.Evaluate = class Evaluate {
 		let numBuffer = "";
 		for (let i = 0; i < str.length; i++) {
 
-			if (this.isOperator(str[i])) {
+			if (this.isOperator(str[i]) && str[i] !== '-') {
 				if (numBuffer !== "") {
 					tokenArray.push(numBuffer);
 					numBuffer = "";
 				}
 				tokenArray.push(str[i]);
+			}
+			else if (str[i] === '-') {
+				if (i > 0 && this.isDigit(str[i - 1])) {
+					if (numBuffer) {
+						tokenArray.push(numBuffer);
+						numBuffer = "";
+					}
+					tokenArray.push(str[i]);
+				}
+				else {
+					numBuffer = numBuffer + str[i];
+				}
 			}
 
 			else if (this.isDigit(str[i])) {
@@ -75,6 +87,6 @@ exports.Evaluate = class Evaluate {
 
 	async create(data, params) {
 		let expression = data.expression;
-		this.tokenizeExpression('(4+1)/2');
+		this.tokenizeExpression('(1+2)/3*(4-5)');
 	}
 };
