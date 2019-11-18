@@ -11,3 +11,5 @@ class ParseTree {
         }
     }
 }
+
+module.exports = ParseTree;
