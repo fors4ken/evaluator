@@ -41,6 +41,18 @@ describe('\'evaluate\' service', () => {
 		});
 	});
 
+	context('precedence', () => {
+		it('should return correct precedence', () => {
+			expect(evaluate.precedence('^')).to.be.equal(3);
+			expect(evaluate.precedence('*')).to.be.equal(2);
+			expect(evaluate.precedence('/')).to.be.equal(2);
+			expect(evaluate.precedence('+')).to.be.equal(1);
+			expect(evaluate.precedence('-')).to.be.equal(1);
+			expect(evaluate.precedence('1')).to.be.equal(-1);
+			expect(evaluate.precedence('a')).to.be.equal(-1);
+		});
+	});
+
 	context('tokenizeExpression', () => {
 		it('should tokenize expression', () => {
 			expect(evaluate.tokenizeExpression('(4+1)/2')).to.be.deep.equal(['(', '4', '+', '1', ')', '/', '2']);
