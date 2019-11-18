@@ -12,7 +12,7 @@ exports.Evaluate = class Evaluate {
 	}
 
 	isOperator(ch) {
-		if (ch === '+' || ch === '-' || ch === '*' || ch === '/' || ch === '(' || ch === ')') return true;
+		if (ch === '^' || ch === '+' || ch === '-' || ch === '*' || ch === '/' || ch === '(' || ch === ')') return true;
 		else return false;
 	}
 
@@ -22,14 +22,19 @@ exports.Evaluate = class Evaluate {
 	}
 
 	precedence(ch) {
-		if (c === '^')
+		if (ch === '^')
 			return 3;
-		else if (c === '*' || c === '/')
+		else if (ch === '*' || ch === '/')
 			return 2;
-		else if (c === '+' || c === '-')
+		else if (ch === '+' || ch === '-')
 			return 1;
 		else
 			return -1;
+	}
+
+	isParenthesis(ch) {
+		if (ch === '(' || ch === ')') return true;
+		return false;
 	}
 
 	/**
@@ -45,24 +50,12 @@ exports.Evaluate = class Evaluate {
 		let numBuffer = "";
 		for (let i = 0; i < str.length; i++) {
 
-			if (this.isOperator(str[i]) && str[i] !== '-') {
+			if (this.isOperator(str[i])) {
 				if (numBuffer !== "") {
 					tokenArray.push(numBuffer);
 					numBuffer = "";
 				}
 				tokenArray.push(str[i]);
-			}
-			else if (str[i] === '-') {
-				if (i > 0 && this.isDigit(str[i - 1])) {
-					if (numBuffer) {
-						tokenArray.push(numBuffer);
-						numBuffer = "";
-					}
-					tokenArray.push(str[i]);
-				}
-				else {
-					numBuffer = numBuffer + str[i];
-				}
 			}
 
 			else if (this.isDigit(str[i])) {
@@ -99,23 +92,66 @@ exports.Evaluate = class Evaluate {
 			result: null
 		}
 		if (this.validateExpression(tokenArray)) {
-
-
+			console.log("lul");
 		}
 		else {
+
+			let postfixArray = this.convertToPostfix(tokenArray);
 			evaluationResult.error = "Parse Error";
 		}
 		return evaluationResult;
 	}
 
 	convertToPostfix(tokenArray) {
+		let stack = new Stack();
 
+		let postfixArray = [];
+
+		tokenArray.forEach(token => {
+
+			if (this.isDigit(token)) {
+				postfixArray.push(token);
+			}
+
+			else if (this.isOperator(token) && !this.isParenthesis(token)) {
+				if (this.precedence(token) > this.precedence(stack.top())) {
+					stack.push(token);
+				}
+				else {
+					while (!this.isParenthesis(stack.top()) && !(this.precedence(stack.top()) < this.precedence(token))) {
+						//if (this.precedence(stack.top()) >= this.precedence(token)) {
+						let op = stack.pop();
+						postfixArray.push(op);
+						//		}
+						//		else break;
+					}
+					stack.push(token);
+				}
+			}
+
+			else if (token === '(') {
+				stack.push(token);
+			}
+
+			else if (token === ')') {
+				let op = stack.pop();
+				while (op !== '(') {
+					postfixArray.push(op);
+					op = stack.pop();
+				}
+			}
+
+		});
+		while (!stack.isEmpty()) {
+			postfixArray.push(stack.pop());
+		}
+		return postfixArray;
 	}
 
 	async create(data, params) {
 		let expression = data.expression;
 
-		let tokenArray = this.tokenizeExpression('(1+2)/3*(4-5)');
+		let tokenArray = this.tokenizeExpression('1+2*(3^4-5)^(6+7*8)-9');
 
 		let result = this.evaluate(tokenArray);
 		return result;
