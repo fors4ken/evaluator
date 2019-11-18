@@ -1,3 +1,4 @@
+const Stack = require('./stack');
 /* eslint-disable no-unused-vars */
 exports.Evaluate = class Evaluate {
 	constructor(options) {
@@ -18,6 +19,17 @@ exports.Evaluate = class Evaluate {
 	isDecimal(ch) {
 		if (ch === '.') return true;
 		else return false;
+	}
+
+	precedence(ch) {
+		if (c === '^')
+			return 3;
+		else if (c === '*' || c === '/')
+			return 2;
+		else if (c === '+' || c === '-')
+			return 1;
+		else
+			return -1;
 	}
 
 	/**
@@ -82,11 +94,30 @@ exports.Evaluate = class Evaluate {
 	 * @description Evaluates a mathematical expression
 	 */
 	evaluate(tokenArray) {
+		let evaluationResult = {
+			error: null,
+			result: null
+		}
+		if (this.validateExpression(tokenArray)) {
+
+
+		}
+		else {
+			evaluationResult.error = "Parse Error";
+		}
+		return evaluationResult;
+	}
+
+	convertToPostfix(tokenArray) {
 
 	}
 
 	async create(data, params) {
 		let expression = data.expression;
-		this.tokenizeExpression('(1+2)/3*(4-5)');
+
+		let tokenArray = this.tokenizeExpression('(1+2)/3*(4-5)');
+
+		let result = this.evaluate(tokenArray);
+		return result;
 	}
 };
