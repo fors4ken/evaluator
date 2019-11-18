@@ -76,7 +76,7 @@ exports.Evaluate = class Evaluate {
 	 * @description Returns true if the tokenized expression is valid otherwise false
 	 */
 	validateExpression(tokenArray) {
-
+		return true;
 	}
 
 
@@ -92,14 +92,49 @@ exports.Evaluate = class Evaluate {
 			result: null
 		}
 		if (this.validateExpression(tokenArray)) {
-			console.log("lul");
+			let postfixArray = this.convertToPostfix(tokenArray);
+			evaluationResult.result = this.postfixEvaluation(postfixArray);
+
 		}
 		else {
-
-			let postfixArray = this.convertToPostfix(tokenArray);
 			evaluationResult.error = "Parse Error";
 		}
 		return evaluationResult;
+	}
+
+	postfixEvaluation(postfixArray) {
+		let stack = new Stack();
+		postfixArray.forEach(token => {
+			if (this.isDigit(token)) {
+				stack.push(token);
+			}
+			else {
+				let operand1 = parseFloat(stack.pop());
+				let operand2 = parseFloat(stack.pop());
+				let res;
+				switch (token) {
+					case '+':
+						res = operand1 + operand2;
+						break;
+					case '-':
+						res = operand1 - operand2;
+						break;
+					case '*':
+						res = operand1 * operand2;
+						break;
+					case '/':
+						res = operand1 / operand2;
+						break;
+					case '^':
+						res = operand1 ^ operand2;
+						break;
+					default:
+						break;
+				}
+				stack.push(res);
+			}
+		});
+		return stack.pop();
 	}
 
 	convertToPostfix(tokenArray) {
@@ -119,11 +154,8 @@ exports.Evaluate = class Evaluate {
 				}
 				else {
 					while (!this.isParenthesis(stack.top()) && !(this.precedence(stack.top()) < this.precedence(token))) {
-						//if (this.precedence(stack.top()) >= this.precedence(token)) {
 						let op = stack.pop();
 						postfixArray.push(op);
-						//		}
-						//		else break;
 					}
 					stack.push(token);
 				}
@@ -142,16 +174,18 @@ exports.Evaluate = class Evaluate {
 			}
 
 		});
+
 		while (!stack.isEmpty()) {
 			postfixArray.push(stack.pop());
 		}
+
 		return postfixArray;
 	}
 
 	async create(data, params) {
 		let expression = data.expression;
 
-		let tokenArray = this.tokenizeExpression('1+2*(3^4-5)^(6+7*8)-9');
+		let tokenArray = this.tokenizeExpression(expression);
 
 		let result = this.evaluate(tokenArray);
 		return result;

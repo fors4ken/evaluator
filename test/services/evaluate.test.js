@@ -61,6 +61,15 @@ describe('\'evaluate\' service', () => {
 		});
 	});
 
+	context('postfixEvaluation', () => {
+		it('should evaluate the postfix expression', () => {
+			expect(evaluate.postfixEvaluation(['1', '2', '+', '3', '+']))
+				.to.be.equal(6);
+			expect(evaluate.postfixEvaluation(['1', '2', '+', '3', '+', '6', '/', '2', '3', '^', '+', '9', '-']))
+				.to.be.equal(0.0);
+		});
+	});
+
 	context('tokenizeExpression', () => {
 		it('should tokenize expression', () => {
 			expect(evaluate.tokenizeExpression('(4+1)/2')).to.be.deep.equal(['(', '4', '+', '1', ')', '/', '2']);
