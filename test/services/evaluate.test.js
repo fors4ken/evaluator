@@ -53,6 +53,13 @@ describe('\'evaluate\' service', () => {
 		});
 	});
 
+	context('convertToPostfix', () => {
+		it('should return expression in postfix notation', () => {
+			expect(evaluate.convertToPostfix(['a', '+', 'b', '*', '(', 'c', '^', 'd', '-', 'e', ')', '^', '(', 'f', '+', 'g', '*', 'h', ')', '-', 'i']))
+				.to.be.deep.equal(['a', 'b', 'c', 'd', '^', 'e', '-', 'f', 'g', 'h', '*', '+', '^', '*', '+', 'i', '-']);
+		});
+	});
+
 	context('tokenizeExpression', () => {
 		it('should tokenize expression', () => {
 			expect(evaluate.tokenizeExpression('(4+1)/2')).to.be.deep.equal(['(', '4', '+', '1', ')', '/', '2']);
