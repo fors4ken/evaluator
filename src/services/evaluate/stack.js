@@ -7,7 +7,7 @@ class Stack {
     }
     pop() {
         if (this.s.length !== 0) return this.s.pop();
-        else return undefined;
+        else return null;
     }
     isEmpty() {
         if (this.s.length === 0) return true;
@@ -17,7 +17,7 @@ class Stack {
         if (this.s.length !== 0) {
             return this.s[this.s.length - 1];
         }
-        else return undefined;
+        else return null;
     }
 }
 
