@@ -27,6 +27,7 @@ describe('\'evaluate\' service', () => {
 
 	context('isOperator', () => {
 		it('operators and parenthesis should return true', () => {
+			expect(evaluate.isOperator('^')).to.be.true;
 			expect(evaluate.isOperator('+')).to.be.true;
 			expect(evaluate.isOperator('-')).to.be.true;
 			expect(evaluate.isOperator('/')).to.be.true;
@@ -55,8 +56,8 @@ describe('\'evaluate\' service', () => {
 
 	context('convertToPostfix', () => {
 		it('should return expression in postfix notation', () => {
-			expect(evaluate.convertToPostfix(['a', '+', 'b', '*', '(', 'c', '^', 'd', '-', 'e', ')', '^', '(', 'f', '+', 'g', '*', 'h', ')', '-', 'i']))
-				.to.be.deep.equal(['a', 'b', 'c', 'd', '^', 'e', '-', 'f', 'g', 'h', '*', '+', '^', '*', '+', 'i', '-']);
+			expect(evaluate.convertToPostfix(['1', '+', '2', '*', '(', '3', '^', '4', '-', '5', ')', '^', '(', '6', '+', '7', '*', '8', ')', '-', '9']))
+				.to.be.deep.equal(['1', '2', '3', '4', '^', '5', '-', '6', '7', '8', '*', '+', '^', '*', '+', '9', '-']);
 		});
 	});
 
