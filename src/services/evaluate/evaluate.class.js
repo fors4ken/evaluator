@@ -114,19 +114,19 @@ exports.Evaluate = class Evaluate {
 				let res;
 				switch (token) {
 					case '+':
-						res = operand1 + operand2;
+						res = operand2 + operand1;
 						break;
 					case '-':
-						res = operand1 - operand2;
+						res = operand2 - operand1;
 						break;
 					case '*':
-						res = operand1 * operand2;
+						res = operand2 * operand1;
 						break;
 					case '/':
-						res = operand1 / operand2;
+						res = operand2 / operand1;
 						break;
 					case '^':
-						res = operand1 ^ operand2;
+						res = Math.pow(operand2, operand1);
 						break;
 					default:
 						break;
