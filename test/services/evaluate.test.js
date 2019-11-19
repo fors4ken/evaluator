@@ -66,7 +66,7 @@ describe('\'evaluate\' service', () => {
 			expect(evaluate.postfixEvaluation(['1', '2', '+', '3', '+']))
 				.to.be.equal(6);
 			expect(evaluate.postfixEvaluation(['1', '2', '+', '3', '+', '6', '/', '2', '3', '^', '+', '9', '-']))
-				.to.be.equal(0.0);
+				.to.be.equal(0);
 		});
 	});
 
