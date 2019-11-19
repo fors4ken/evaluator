@@ -45,6 +45,7 @@ exports.Evaluate = class Evaluate {
 	 * @example '(a+b)/c' --> ['(','a','+','b',')','/','c']
 	 */
 	tokenizeExpression(str) {
+		str = str.replace(/\s/g, "");
 		str = str.split("");
 		let tokenArray = [];
 		let numBuffer = "";
